@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -9,6 +10,7 @@ import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter_google_places/flutter_google_places.dart';
+import 'mosque_list_screen.dart';
 
 const kGoogleApiKey = "AIzaSyDqwUf8f05X7XztGJtCkaQ1LmbIeFzgwrI";
 
@@ -126,19 +128,40 @@ class _MapState extends State<Map> {
                       ),
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(
-                      top: .0,
-                    ),
-                    child: RaisedButton(
-                      padding: EdgeInsets.all(20),
-                      color: Colors.green,
-                      onPressed: _handlePressButton,
-                      child: Text(
-                        "Search places",
-                        style: TextStyle(fontSize: 23),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Expanded(
+                        child: RaisedButton(
+                          padding: EdgeInsets.all(20),
+                          color: Colors.green,
+                          onPressed: _handlePressButton,
+                          child: Text(
+                            "Search places",
+                            style: TextStyle(fontSize: 27),
+                          ),
+                        ),
                       ),
-                    ),
+                      RaisedButton(
+                        padding: EdgeInsets.all(23),
+                        color: Colors.lightGreen,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return MosqueList();
+                              },
+                            ),
+                          );
+                        },
+                        child: Icon(
+                          FontAwesomeIcons.mosque,
+                          size: 27.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

@@ -40,14 +40,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays([]);
-    return MaterialApp(
-      theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return Expanded(
+      child: MaterialApp(
+        theme: ThemeData(
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          primarySwatch: Colors.green,
+        ),
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.light,
+        debugShowCheckedModeBanner: false,
+        home: SplashScreen(),
       ),
-      darkTheme: darkTheme,
-      themeMode: ThemeMode.light,
-      debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
     );
   }
 }

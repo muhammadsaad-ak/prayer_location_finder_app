@@ -14,8 +14,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
-
   cupertino_icons: ^1.0.0
   eva_icons_flutter: ^2.0.1
   image_picker: ^0.6.7+17
@@ -32,7 +30,8 @@ dependencies:
   relative_scale: ^1.1.2
   flutter_google_places:
   auto_size_text: ^2.1.0
-  filter_list: ^0.0.6
+  filter_list: ^0.0.8
+  smart_select: ^4.3.2
   pinput: ^0.2.6
   http: ^0.12.2
   uuid: ^2.2.2

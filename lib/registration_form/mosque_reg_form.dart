@@ -10,6 +10,8 @@ import 'package:google_maps_webservice/geolocation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:prayer_location_finder_app/model/apiinfo.dart';
+import 'package:prayer_location_finder_app/services/api_manager.dart';
 
 class MyCustomForm extends StatefulWidget {
   MyCustomForm({Key key, this.title}) : super(key: key);
@@ -22,6 +24,13 @@ class MyCustomForm extends StatefulWidget {
 }
 
 class MyCustomFormState extends State<MyCustomForm> {
+  // Future<PrayArea> _prayArea;
+  // @override
+  // void initState() {
+  //   _prayArea = API_Manager().getData();
+  //   super.initState();
+  // }
+
   // String displayName = "${Map.kInitialPosition}";
   // var _controller = TextEditingController();
   // var uuid = new Uuid();

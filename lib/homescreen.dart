@@ -292,16 +292,11 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
 
   @override
   Widget build(BuildContext context) {
-    @override
-    void dispose() {
-      super.dispose();
-    }
-
     var hDate = new HijriCalendar.fromDate(new DateTime.now());
     final params = CalculationMethod.muslim_world_league.getParameters();
     params.madhab = Madhab.hanafi;
     params.adjustments.fajr = 2;
-    String locale = 'en';
+    String locale = 'ar';
     HijriCalendar _today = new HijriCalendar.now();
     HijriCalendar.setLocal(locale);
     DateTime now = new DateTime.now();
@@ -336,25 +331,25 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return MosqueList();
-                        },
-                      ),
-                    );
-                  },
-                  child: Icon(
-                    FontAwesomeIcons.mosque,
-                    size: 20.0,
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.only(right: 20.0),
+              //   child: GestureDetector(
+              //     onTap: () {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //           builder: (context) {
+              //             return MosqueList();
+              //           },
+              //         ),
+              //       );
+              //     },
+              //     child: Icon(
+              //       FontAwesomeIcons.mosque,
+              //       size: 20.0,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
           body: Container(
@@ -364,14 +359,17 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                 child: CarouselSlider(
                   items: imageSliders,
                   options: CarouselOptions(
-                      viewportFraction: 1.0,
-                      autoPlay: true,
-                      aspectRatio: 16 / 8,
-                      onPageChanged: (index, reason) {
+                    viewportFraction: 1.0,
+                    autoPlay: true,
+                    aspectRatio: 16 / 8,
+                    onPageChanged: (index, reason) {
+                      if (this.mounted) {
                         setState(() {
                           _current = index;
                         });
-                      }),
+                      }
+                    },
+                  ),
                 ),
               ),
               Row(
@@ -604,21 +602,21 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicatorDemo> {
                             child: Center(
                               child: TweenAnimationBuilder<Duration>(
                                   duration: Duration(
-                                    hours: prayerTimes.isha.hour % 12 -
+                                    hours: prayerTimes.maghrib.hour % 12 -
                                         _getSysTime() % 12,
-                                    minutes: prayerTimes.isha.minute % 12 -
+                                    minutes: prayerTimes.maghrib.minute % 12 -
                                         _getSysTime2() % 12,
-                                    seconds: prayerTimes.isha.second % 12 -
+                                    seconds: prayerTimes.maghrib.second % 12 -
                                         _getSysTime3() % 12,
                                   ),
                                   tween: Tween(
                                       begin: Duration(
-                                        hours: prayerTimes.isha.hour % 12 -
-                                            _getSysTime() % 12,
-                                        minutes: prayerTimes.isha.minute % 12 -
-                                            _getSysTime2() % 12,
-                                        // seconds: prayerTimes.isha.second % 12 -
-                                        //     _getSysTime3() % 12,
+                                        hours: _getSysTime() -
+                                            prayerTimes.maghrib.hour % 12,
+                                        minutes: _getSysTime2() -
+                                            prayerTimes.maghrib.minute % 12,
+                                        // seconds: _getSysTime3() -
+                                        //     prayerTimes.maghrib.second % 12,
                                       ),
                                       end: Duration.zero),
                                   onEnd: () {
