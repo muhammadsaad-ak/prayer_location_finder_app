@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:custom_switch/custom_switch.dart';
 
 class ActorFilterEntry {
   const ActorFilterEntry(this.name, this.initials);
@@ -21,15 +22,11 @@ class CastFilter extends StatefulWidget {
 }
 
 class CastFilterState extends State<CastFilter> {
-  List<bool> _values = [false, false, false, false];
+  bool status = false;
+  bool status2 = false;
+  bool status3 = false;
+  bool status4 = false;
   double _currentSliderValue = 5;
-  final List<Filters> cast2 = <Filters>[
-    const Filters("Maslaq", "M"),
-    const Filters("Chair Facility", "CF"),
-    const Filters("Ground Floor", "GF"),
-    const Filters("Ablution", "A"),
-    const Filters("Washroom", "W"),
-  ];
   final List<ActorFilterEntry> _cast = <ActorFilterEntry>[
     const ActorFilterEntry('Sunni', 'Su'),
     const ActorFilterEntry('Shia', 'Sh'),
@@ -64,7 +61,6 @@ class CastFilterState extends State<CastFilter> {
 
   @override
   Widget build(BuildContext context) {
-    final int count = 4;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
@@ -96,33 +92,120 @@ class CastFilterState extends State<CastFilter> {
                 ),
                 Column(
                   children: <Widget>[
-                    for (int i = 0; i < count; i++)
-                      ListTile(
-                        title: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Switch(
-                                value: _values[i],
-                                activeColor: Color(0xFF4CAF50),
-                                onChanged: i == count
-                                    ? null
-                                    : (bool value) {
-                                        setState(() {
-                                          _values[i] = value;
-                                        });
-                                      },
-                              ),
-                            ),
-                          ],
-                        ),
-                        leading: Text(
-                          'Switch ${i + 1}',
-                          style: Theme.of(context).textTheme.subtitle1.copyWith(
-                              color:
-                                  i == count ? Colors.black38 : Colors.black),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: Text(
+                          "\n  Choice Filters",
+                          textAlign: TextAlign.left,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
                         ),
                       ),
+                    ),
+                    ListTile(
+                      title: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Switch(
+                              value: status,
+                              activeColor: Color(0xFF4CAF50),
+                              onChanged: (value) {
+                                setState(() {
+                                  status = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      leading: Text(
+                        "Chair Facility",
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1
+                            .copyWith(color: Colors.black),
+                      ),
+                    ),
+                    ListTile(
+                      title: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Switch(
+                              value: status2,
+                              activeColor: Color(0xFF4CAF50),
+                              onChanged: (value) {
+                                setState(() {
+                                  status2 = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      leading: Text(
+                        "Washroom",
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1
+                            .copyWith(color: Colors.black),
+                      ),
+                    ),
+                    ListTile(
+                      title: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Switch(
+                              value: status3,
+                              activeColor: Color(0xFF4CAF50),
+                              onChanged: (value) {
+                                setState(() {
+                                  status3 = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      leading: Text(
+                        "Abolution",
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1
+                            .copyWith(color: Colors.black),
+                      ),
+                    ),
+                    ListTile(
+                      title: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Switch(
+                              value: status4,
+                              activeColor: Color(0xFF4CAF50),
+                              onChanged: (value) {
+                                setState(() {
+                                  status4 = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      leading: Text(
+                        "Ground Floor",
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1
+                            .copyWith(color: Colors.black),
+                      ),
+                    ),
                   ],
                 ),
                 Align(
