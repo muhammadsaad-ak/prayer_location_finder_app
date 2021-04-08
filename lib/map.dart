@@ -13,12 +13,14 @@ import 'dart:math';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'mosque_list_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:prayer_location_finder_app/model/directions_model.dart';
+import 'package:prayer_location_finder_app/model/directions_repository.dart';
 
 const kGoogleApiKey = "AIzaSyBB14A2BN2cudYScIVIDyn4JODrVwrHtcM";
 
 // to get places detail (lat/lng)
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
-final LatLng _center = const LatLng(24.8607, 67.0011);
+
 //
 // final customTheme = ThemeData(
 //   primarySwatch: Colors.blue,
@@ -83,8 +85,20 @@ class _MapState extends State<Map> {
   //     );
   //   });
   // }
-
+  static const _initialCameraPosition = CameraPosition(
+    zoom: 11.5,
+    target: LatLng(24.8607, 67.0011),
+  );
   GoogleMapController mapController;
+  Marker _origin;
+  Marker _destination;
+  Directions _info;
+
+  @override
+  void dispose() {
+    mapController.dispose();
+    super.dispose();
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -93,28 +107,110 @@ class _MapState extends State<Map> {
   Mode _mode = Mode.overlay;
 
   PickResult selectedPlace;
-
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
         key: homeScaffoldKey,
+        appBar: AppBar(
+          centerTitle: false,
+          title: const Text('Google Maps'),
+          actions: [
+            if (_origin != null)
+              TextButton(
+                onPressed: () => mapController.animateCamera(
+                  CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                      target: _origin.position,
+                      zoom: 14.5,
+                      tilt: 50.0,
+                    ),
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  primary: Colors.green,
+                  textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                child: const Text('ORIGIN'),
+              ),
+            if (_destination != null)
+              TextButton(
+                onPressed: () => mapController.animateCamera(
+                  CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                      target: _destination.position,
+                      zoom: 14.5,
+                      tilt: 50.0,
+                    ),
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  primary: Colors.blue,
+                  textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                child: const Text('DEST'),
+              )
+          ],
+        ),
         body: Stack(
-          children: [
+          children: <Widget>[
             SafeArea(
               child: GoogleMap(
+                // markers: Set.from({selectedPlace.photos}),
                 padding: EdgeInsets.fromLTRB(0, 10, 0, 135) +
                     MediaQuery.of(context).padding,
-                onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  zoom: 10.151926040649414,
-                  target: _center,
-                ),
-                myLocationButtonEnabled: true,
+                onMapCreated: (controller) => mapController = controller,
+                initialCameraPosition: _initialCameraPosition,
+                myLocationButtonEnabled: false,
                 myLocationEnabled: true,
-                compassEnabled: true,
+                compassEnabled: false,
+                zoomControlsEnabled: false,
+                markers: {
+                  if (_origin != null) _origin,
+                  if (_destination != null) _destination
+                },
+                polylines: {
+                  if (_info != null)
+                    Polyline(
+                      polylineId: PolylineId('overview_polyline'),
+                      color: Colors.red,
+                      width: 5,
+                      points: _info.polylinePoints
+                          .map((e) => LatLng(e.latitude, e.longitude))
+                          .toList(),
+                    ),
+                },
+                onLongPress: _addMarker,
               ),
             ),
+            if (_info != null)
+              Positioned(
+                top: 20.0,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6.0,
+                    horizontal: 12.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.yellowAccent,
+                    borderRadius: BorderRadius.circular(20.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(0, 2),
+                        blurRadius: 6.0,
+                      )
+                    ],
+                  ),
+                  child: Text(
+                    '${_info.totalDistance}, ${_info.totalDuration}',
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
             // _buildDropdownMenu(),
             Center(
               child: Column(
@@ -133,7 +229,7 @@ class _MapState extends State<Map> {
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
                         flex: 1,
@@ -152,7 +248,7 @@ class _MapState extends State<Map> {
                       ),
                       RaisedButton(
                         elevation: 50,
-                        padding: EdgeInsets.all(23),
+                        padding: EdgeInsets.all(26),
                         color: Colors.lightGreen,
                         onPressed: () {
                           Navigator.push(
@@ -176,8 +272,61 @@ class _MapState extends State<Map> {
             ),
           ],
         ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 10.0),
+          child: Align(
+            alignment: Alignment.topRight,
+            child: FloatingActionButton(
+              onPressed: () => mapController.animateCamera(
+                _info != null
+                    ? CameraUpdate.newLatLngBounds(_info.bounds, 100.0)
+                    : CameraUpdate.newCameraPosition(_initialCameraPosition),
+              ),
+              materialTapTargetSize: MaterialTapTargetSize.padded,
+              backgroundColor: Colors.green,
+              child: const Icon(Icons.center_focus_strong, size: 36.0),
+            ),
+          ),
+        ),
       ),
     );
+  }
+
+  void _addMarker(LatLng pos) async {
+    if (_origin == null || (_origin != null && _destination != null)) {
+      // Origin is not set OR Origin/Destination are both set
+      // Set origin
+      setState(() {
+        _origin = Marker(
+          markerId: MarkerId('origin'),
+          infoWindow: const InfoWindow(title: 'Origin'),
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          position: pos,
+        );
+        // Reset destination
+        _destination = null;
+
+        // Reset info
+        _info = null;
+      });
+    } else {
+      // Origin is already set
+      // Set destination
+      setState(() {
+        _destination = Marker(
+          markerId: MarkerId('destination'),
+          infoWindow: const InfoWindow(title: 'Destination'),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          position: pos,
+        );
+      });
+
+      // Get directions
+      final directions = await DirectionsRepository()
+          .getDirections(origin: _origin.position, destination: pos);
+      setState(() => _info = directions);
+    }
   }
 
   void onError(PlacesAutocompleteResponse response) {
