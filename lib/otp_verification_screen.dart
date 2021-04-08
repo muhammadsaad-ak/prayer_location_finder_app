@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'homescreen.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+import 'manual_location.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String phone;
@@ -73,7 +74,7 @@ class OtpPageState extends State<OtpVerificationScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => UserDetails()),
+                                  builder: (context) => ManualLocation()),
                               (route) => false);
                         }
                       });
@@ -102,7 +103,7 @@ class OtpPageState extends State<OtpVerificationScreen> {
             if (value.user != null) {
               Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => UserDetails()),
+                  MaterialPageRoute(builder: (context) => ManualLocation()),
                   (route) => false);
             }
           });

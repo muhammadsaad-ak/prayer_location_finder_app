@@ -7,12 +7,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 // import 'package:location/location.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+import 'package:google_api_headers/google_api_headers.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'mosque_list_screen.dart';
+import 'package:flutter/material.dart';
 
-const kGoogleApiKey = "AIzaSyDqwUf8f05X7XztGJtCkaQ1LmbIeFzgwrI";
+const kGoogleApiKey = "AIzaSyBB14A2BN2cudYScIVIDyn4JODrVwrHtcM";
 
 // to get places detail (lat/lng)
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
@@ -105,6 +107,7 @@ class _MapState extends State<Map> {
                     MediaQuery.of(context).padding,
                 onMapCreated: _onMapCreated,
                 initialCameraPosition: CameraPosition(
+                  zoom: 10.151926040649414,
                   target: _center,
                 ),
                 myLocationButtonEnabled: true,
@@ -133,17 +136,22 @@ class _MapState extends State<Map> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Expanded(
+                        flex: 1,
                         child: RaisedButton(
-                          padding: EdgeInsets.all(20),
+                          elevation: 50,
+                          padding: EdgeInsets.all(23),
                           color: Colors.green,
                           onPressed: _handlePressButton,
                           child: Text(
                             "Search places",
-                            style: TextStyle(fontSize: 27),
+                            style: TextStyle(
+                              fontSize: 27,
+                            ),
                           ),
                         ),
                       ),
                       RaisedButton(
+                        elevation: 50,
                         padding: EdgeInsets.all(23),
                         color: Colors.lightGreen,
                         onPressed: () {
