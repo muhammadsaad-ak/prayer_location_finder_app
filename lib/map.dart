@@ -145,7 +145,7 @@ class _MapState extends State<Map> {
                   ),
                 ),
                 style: TextButton.styleFrom(
-                  primary: Colors.blue,
+                  primary: Colors.white,
                   textStyle: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 child: const Text('DEST'),
@@ -173,7 +173,7 @@ class _MapState extends State<Map> {
                   if (_info != null)
                     Polyline(
                       polylineId: PolylineId('overview_polyline'),
-                      color: Colors.red,
+                      color: Colors.green,
                       width: 5,
                       points: _info.polylinePoints
                           .map((e) => LatLng(e.latitude, e.longitude))
@@ -185,14 +185,15 @@ class _MapState extends State<Map> {
             ),
             if (_info != null)
               Positioned(
-                top: 20.0,
+                top: 30.0,
+                left: 70,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    vertical: 6.0,
+                    vertical: 12.0,
                     horizontal: 12.0,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.yellowAccent,
+                    color: Colors.green,
                     borderRadius: BorderRadius.circular(20.0),
                     boxShadow: const [
                       BoxShadow(
@@ -205,6 +206,7 @@ class _MapState extends State<Map> {
                   child: Text(
                     '${_info.totalDistance}, ${_info.totalDuration}',
                     style: const TextStyle(
+                      color: Colors.white,
                       fontSize: 18.0,
                       fontWeight: FontWeight.w600,
                     ),
@@ -241,6 +243,7 @@ class _MapState extends State<Map> {
                           child: Text(
                             "Search places",
                             style: TextStyle(
+                              color: Colors.white,
                               fontSize: 27,
                             ),
                           ),
@@ -262,6 +265,7 @@ class _MapState extends State<Map> {
                         },
                         child: Icon(
                           FontAwesomeIcons.mosque,
+                          color: Colors.white,
                           size: 27.0,
                         ),
                       ),
@@ -273,7 +277,8 @@ class _MapState extends State<Map> {
           ],
         ),
         floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 10.0),
+          padding:
+              const EdgeInsets.symmetric(vertical: 100.0, horizontal: 10.0),
           child: Align(
             alignment: Alignment.topRight,
             child: FloatingActionButton(
