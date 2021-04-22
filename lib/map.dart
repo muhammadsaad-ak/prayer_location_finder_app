@@ -15,6 +15,7 @@ import 'mosque_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:prayer_location_finder_app/model/directions_model.dart';
 import 'package:prayer_location_finder_app/model/directions_repository.dart';
+import 'package:google_maps_webservice/geocoding.dart';
 
 const kGoogleApiKey = "AIzaSyBB14A2BN2cudYScIVIDyn4JODrVwrHtcM";
 
@@ -186,7 +187,7 @@ class _MapState extends State<Map> {
             if (_info != null)
               Positioned(
                 top: 30.0,
-                left: 70,
+                left: 7.0,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     vertical: 12.0,
@@ -224,7 +225,7 @@ class _MapState extends State<Map> {
                     child: SizedBox(
                       height: 42,
                       child: Text(
-                        '$selectedPlace',
+                        "$selectedPlace",
                         textAlign: TextAlign.center,
                       ),
                     ),

@@ -5,7 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:prayer_location_finder_app/address_search.dart';
 import 'package:prayer_location_finder_app/place_service.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_webservice/geolocation.dart';
+import 'package:intl/intl.dart';
+import 'package:location/location.dart';
 // import 'package:prayer_location_finder_app/map.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
@@ -70,7 +73,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   //     throw Exception('Failed to load predictions');
   //   }
   // }
-  Location _location = Location(24.8607, 67.0011);
+
   final _controller = TextEditingController();
   String _streetNumber = '';
   String _street = '';
@@ -158,7 +161,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                 decoration: InputDecoration(
                                   suffixIcon: IconButton(
                                     onPressed: () {
-                                      _controller.text = _location.toString();
+                                      // _controller.text = _location.toString();
                                     },
                                     icon: Icon(Icons.my_location),
                                   ),
